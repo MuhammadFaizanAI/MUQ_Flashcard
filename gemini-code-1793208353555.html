@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معلّم القرآن - Unit 2 Quiz & Flashcards</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Arabic & Urdu -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Nastaliq Urdu', serif;
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
+        }
+        .urdu-text {
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="bg-slate-800 border-b border-slate-700 shadow-lg py-4 px-6">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold text-emerald-400 urdu-text">معلّم القرآن - یونٹ 2</h1>
+                <p id="book-title" class="text-xs text-slate-400 urdu-text">قرآن خود سمجھنے کے لیے آسان انداز</p>
+            </div>
+            <!-- Lesson Filter -->
+            <div class="flex items-center gap-2">
+                <label for="lesson-select" class="text-xs text-slate-300 urdu-text">سبق منتخب کریں:</label>
+                <select id="lesson-select" class="bg-slate-700 text-slate-200 border border-slate-600 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-emerald-500">
+                    <option value="all">تمام اسباق (All Lessons)</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content / Quiz Container -->
+    <main class="max-w-2xl w-full mx-auto px-4 py-8 flex-grow flex flex-col justify-center">
+        
+        <!-- Progress Bar & Stats -->
+        <div class="mb-6 bg-slate-800 p-4 rounded-xl border border-slate-700 shadow flex flex-col gap-3">
+            <div class="flex justify-between items-center text-sm text-slate-300">
+                <span id="progress-text">سوال 1 از 0</span>
+                <div class="flex gap-4">
+                    <span class="text-emerald-400 font-medium">مادرزاد / یاد شدہ: <span id="mastered-count">0</span></span>
+                    <span class="text-amber-400 font-medium">باقی: <span id="remaining-count">0</span></span>
+                </div>
+            </div>
+            <div class="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Flashcard Card -->
+        <div id="card-container" class="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl p-6 sm:p-8 text-center relative transition-all">
+            <!-- Lesson & Section Badge -->
+            <div class="flex justify-between items-center mb-6 text-xs text-slate-400 border-b border-slate-700 pb-3">
+                <span id="lesson-badge" class="bg-emerald-950 text-emerald-300 px-2.5 py-1 rounded-full border border-emerald-800">سبق</span>
+                <span id="section-badge" class="urdu-text text-slate-300"></span>
+            </div>
+
+            <!-- Arabic Prompt -->
+            <div class="mb-8">
+                <span class="text-xs uppercase tracking-wider text-slate-400 block mb-2 font-sans">عربی عبارت (Arabic)</span>
+                <h2 id="arabic-prompt" class="arabic-text text-3xl sm:text-4xl font-bold text-emerald-300 leading-relaxed"></h2>
+            </div>
+
+            <!-- Urdu Answer Section -->
+            <div class="mb-8 min-h-[90px] flex flex-col justify-center items-center">
+                <span class="text-xs uppercase tracking-wider text-slate-400 block mb-2 font-sans">اردو مفہوم (Urdu Meaning)</span>
+                <div id="answer-box" class="w-full bg-slate-900/60 border border-dashed border-slate-600 rounded-xl p-4 flex items-center justify-center">
+                    <button id="show-answer-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-6 py-2.5 rounded-lg shadow transition urdu-text text-base">
+                        _____ جواب دیکھیں (Show Answer) _____
+                    </button>
+                    <p id="urdu-answer" class="urdu-text text-xl text-slate-100 hidden"></p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div id="action-buttons" class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-700 hidden">
+                <button id="repeat-btn" class="bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 px-4 rounded-xl shadow transition urdu-text flex items-center justify-center gap-2">
+                    🔄 دوبارہ کریں (Repeat)
+                </button>
+                <button id="mastered-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium py-3 px-4 rounded-xl shadow transition urdu-text flex items-center justify-center gap-2">
+                    ✅ یاد ہو گیا (Mastered)
+                </button>
+            </div>
+        </div>
+
+        <!-- Completion Screen (Hidden by default) -->
+        <div id="completion-screen" class="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl p-8 text-center hidden">
+            <div class="text-5xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold text-emerald-400 urdu-text mb-2">ماشاءاللہ! تمام سوالات مکمل ہو گئے</h2>
+            <p class="text-slate-300 urdu-text mb-6">آپ نے اس یونٹ کے تمام الفاظ اور تراکیب کی مشق کر لی ہے۔</p>
+            <button id="restart-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-6 py-3 rounded-xl shadow transition urdu-text">
+                دوبارہ شروع کریں (Restart Quiz)
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer with Developer Info -->
+    <footer class="bg-slate-800 border-t border-slate-700 py-6 px-4 mt-8">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-400">
+            <div class="urdu-text text-center sm:text-right">
+                Made by <span class="text-emerald-400 font-semibold">Muhammad Faizan</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="https://linkedin.com/in/muhammadfaizanai" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition flex items-center gap-1.5">
+                    <span>LinkedIn:</span> <span class="underline">muhammadfaizanai</span>
+                </a>
+                <a href="https://github.com/MuhammadFaizanAI" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition flex items-center gap-1.5">
+                    <span>GitHub:</span> <span class="underline">MuhammadFaizanAI</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Quiz Logic -->
+    <script>
+        let allItems = [];
+        let currentQueue = [];
+        let currentIndex = 0;
+        let masteredIds = JSON.parse(localStorage.getItem('muallim_mastered_ids') || '[]');
+
+        // Fetch JSON data from the same folder
+        async function loadQuizData() {
+            try {
+                const response = await fetch('muallim_ul_quran_unit2_lessons_6_13.json');
+                if (!response.ok) throw new Error('Could not load JSON file');
+                const data = await response.json();
+                
+                document.getElementById('book-title').textContent = data.book_ur || "معلّم القرآن - یونٹ 2";
+
+                let idCounter = 1;
+                data.lessons.forEach(lesson => {
+                    // Populate lesson dropdown
+                    const select = document.getElementById('lesson-select');
+                    const option = document.createElement('option');
+                    option.value = lesson.lesson_no;
+                    option.textContent = `سبق ${lesson.lesson_no}: ${lesson.title_ur}`;
+                    select.appendChild(option);
+
+                    // Extract items from sections
+                    if (lesson.sections) {
+                        lesson.sections.forEach(sec => {
+                            if (sec.items) {
+                                sec.items.forEach(item => {
+                                    allItems.push({
+                                        id: `${lesson.lesson_no}-${idCounter++}`,
+                                        lessonNo: lesson.lesson_no,
+                                        lessonTitle: lesson.title_ur,
+                                        sectionTitle: sec.section_ur || sec.section_ar || '',
+                                        arabic: item.arabic || item.verse_ar || item.with_particle_ar || '',
+                                        urdu: item.urdu || item.with_particle_ur || ''
+                                    });
+                                });
+                            }
+                        });
+                    }
+                    // Extract items from exercises if present
+                    if (lesson.exercises) {
+                        lesson.exercises.forEach(ex => {
+                            if (ex.items) {
+                                ex.items.forEach(item => {
+                                    allItems.push({
+                                        id: `${lesson.lesson_no}-ex-${idCounter++}`,
+                                        lessonNo: lesson.lesson_no,
+                                        lessonTitle: lesson.title_ur,
+                                        sectionTitle: `مشق ${ex.exercise_no}`,
+                                        arabic: item.verse_ar || item.arabic || item.word_ar || '',
+                                        urdu: item.urdu || ''
+                                    });
+                                });
+                            }
+                        });
+                    }
+                });
+
+                filterAndStartQuiz('all');
+            } catch (error) {
+                console.error('Error loading quiz data:', error);
+                document.getElementById('card-container').innerHTML = `
+                    <div class="text-red-400 py-8 urdu-text">
+                        <p class="text-lg font-bold mb-2">⚠️ فائل لوڈ کرنے میں خرابی</p>
+                        <p class="text-sm">براہ کرم یقینی بنائیں کہ <code class="bg-slate-900 px-2 py-1 rounded text-emerald-300">muallim_ul_quran_unit2_lessons_6_13.json</code> فائل اسی فولڈر میں موجود ہے اور آپ لوفر سرور (Live Server) کے ذریعے چلا رہے ہیں۔</p>
+                    </div>
+                `;
+            }
+        }
+
+        function filterAndStartQuiz(lessonFilter) {
+            if (lessonFilter === 'all') {
+                currentQueue = [...allItems];
+            } else {
+                currentQueue = allItems.filter(item => item.lessonNo == lessonFilter);
+            }
+            currentIndex = 0;
+            updateStats();
+            loadCard();
+        }
+
+        function updateStats() {
+            const total = currentQueue.length;
+            const masteredInQueue = currentQueue.filter(item => masteredIds.includes(item.id)).length;
+            
+            document.getElementById('mastered-count').textContent = masteredIds.length;
+            document.getElementById('remaining-count').textContent = Math.max(0, total - masteredInQueue);
+            
+            if (total > 0) {
+                const percent = (currentIndex / total) * 100;
+                document.getElementById('progress-bar').style.width = `${percent}%`;
+                document.getElementById('progress-text').textContent = `سوال ${Math.min(currentIndex + 1, total)} از ${total}`;
+            } else {
+                document.getElementById('progress-bar').style.width = '0%';
+                document.getElementById('progress-text').textContent = `سوال 0 از 0`;
+            }
+        }
+
+        function loadCard() {
+            if (currentQueue.length === 0 || currentIndex >= currentQueue.length) {
+                document.getElementById('card-container').classList.add('hidden');
+                document.getElementById('completion-screen').classList.remove('hidden');
+                updateStats();
+                return;
+            }
+
+            document.getElementById('card-container').classList.remove('hidden');
+            document.getElementById('completion-screen').classList.add('hidden');
+
+            const item = currentQueue[currentIndex];
+
+            document.getElementById('lesson-badge').textContent = `سبق ${item.lessonNo}`;
+            document.getElementById('section-badge').textContent = item.sectionTitle;
+            document.getElementById('arabic-prompt').textContent = item.arabic;
+            
+            // Reset answer view
+            document.getElementById('show-answer-btn').classList.remove('hidden');
+            const urduAns = document.getElementById('urdu-answer');
+            urduAns.classList.add('hidden');
+            urduAns.textContent = item.urdu;
+
+            document.getElementById('action-buttons').classList.add('hidden');
+            updateStats();
+        }
+
+        // Event Listeners
+        document.getElementById('show-answer-btn').addEventListener('click', () => {
+            document.getElementById('show-answer-btn').classList.add('hidden');
+            document.getElementById('urdu-answer').classList.remove('hidden');
+            document.getElementById('action-buttons').classList.remove('hidden');
+        });
+
+        document.getElementById('mastered-btn').addEventListener('click', () => {
+            const item = currentQueue[currentIndex];
+            if (!masteredIds.includes(item.id)) {
+                masteredIds.push(item.id);
+                localStorage.setItem('muallim_mastered_ids', JSON.stringify(masteredIds));
+            }
+            currentIndex++;
+            loadCard();
+        });
+
+        document.getElementById('repeat-btn').addEventListener('click', () => {
+            // Move current item to the end of the queue for extra practice
+            const item = currentQueue.splice(currentIndex, 1)[0];
+            currentQueue.push(item);
+            loadCard();
+        });
+
+        document.getElementById('lesson-select').addEventListener('change', (e) => {
+            filterAndStartQuiz(e.target.value);
+        });
+
+        document.getElementById('restart-btn').addEventListener('click', () => {
+            const selectedLesson = document.getElementById('lesson-select').value;
+            filterAndStartQuiz(selectedLesson);
+        });
+
+        // Initialize on load
+        loadQuizData();
+    </script>
+</body>
+</html>
